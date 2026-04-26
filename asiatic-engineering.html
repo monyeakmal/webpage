@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asiatic Engineering — A.E. HVAC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --gold: #B8975A; --gold-light: #D4B47A; --gold-pale: #F5EDD8;
+  --ink: #0E0E0E; --ink-soft: #1C1C1C; --slate: #4A4A4A;
+  --mist: #F7F5F1; --mist-deep: #EDE9E1; --white: #FFFFFF;
+  --rule: rgba(184,151,90,0.25);
+  --ff-display: 'Cormorant Garamond', serif; --ff-body: 'DM Sans', sans-serif;
+}
+html { scroll-behavior: smooth; }
+body { font-family: var(--ff-body); background: var(--mist); color: var(--ink); font-weight: 300; line-height: 1.7; overflow-x: hidden; }
+.page { display: none; }
+.page.active { display: block; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.35rem 4rem;
+  background: rgba(247,245,241,0.96); backdrop-filter: blur(14px);
+  border-bottom: 0.5px solid var(--rule);
+}
+.nav-logo { font-family: var(--ff-display); font-size: 1.2rem; font-weight: 600; letter-spacing: 0.04em; color: var(--ink); text-decoration: none; cursor: pointer; }
+.nav-logo span { color: var(--gold); }
+.nav-links { display: flex; gap: 0; list-style: none; }
+.nav-links li a { font-size: 0.74rem; font-weight: 400; letter-spacing: 0.13em; text-transform: uppercase; color: var(--slate); text-decoration: none; padding: 0.5rem 1.1rem; border-bottom: 1.5px solid transparent; transition: color 0.2s, border-color 0.2s; cursor: pointer; display: block; }
+.nav-links li a:hover, .nav-links li a.active { color: var(--gold); border-bottom-color: var(--gold); }
+.nav-cta { font-size: 0.74rem; font-weight: 500; letter-spacing: 0.11em; text-transform: uppercase; color: var(--white); background: var(--gold); border: none; padding: 0.65rem 1.5rem; cursor: pointer; transition: background 0.2s; }
+.nav-cta:hover { background: var(--ink); }
+
+/* SHARED */
+.section-label { font-size: 0.7rem; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.9rem; display: flex; align-items: center; gap: 0.75rem; }
+.section-label::before { content: ''; display: block; width: 24px; height: 0.5px; background: var(--gold); }
+.section-label.center { justify-content: center; }
+.section-label.center::before { display: none; }
+.section-title { font-family: var(--ff-display); font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 300; line-height: 1.12; color: var(--ink); }
+.section-title em { font-style: italic; color: var(--gold); }
+.btn-primary { font-size: 0.76rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink); background: var(--gold); border: none; padding: 0.9rem 2rem; cursor: pointer; display: inline-block; transition: background 0.2s, color 0.2s; font-family: var(--ff-body); }
+.btn-primary:hover { background: var(--ink); color: var(--white); }
+.btn-outline { font-size: 0.76rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); background: none; border: 0.5px solid var(--gold); padding: 0.9rem 2rem; cursor: pointer; display: inline-block; transition: background 0.2s, color 0.2s; font-family: var(--ff-body); }
+.btn-outline:hover { background: var(--gold); color: var(--ink); }
+.btn-ghost { font-size: 0.76rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.6); background: none; border: 0.5px solid rgba(255,255,255,0.2); padding: 0.9rem 2rem; cursor: pointer; display: inline-block; transition: border-color 0.2s, color 0.2s; font-family: var(--ff-body); }
+.btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+.fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.65s ease, transform 0.65s ease; }
+.fade-up.visible { opacity: 1; transform: translateY(0); }
+
+/* MARQUEE */
+.marquee-strip { background: var(--gold); overflow: hidden; white-space: nowrap; padding: 0.78rem 0; }
+.marquee-inner { display: inline-block; animation: marquee 24s linear infinite; }
+.marquee-inner span { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink); padding: 0 2.5rem; }
+.marquee-inner span::after { content: '·'; margin-left: 2.5rem; }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* PAGE BANNER */
+.page-banner { min-height: 42vh; background: var(--ink-soft); display: flex; align-items: flex-end; padding: 5rem 4rem 3.5rem; position: relative; overflow: hidden; margin-top: 5rem; }
+.page-banner::before { content: attr(data-bg-text); position: absolute; right: 3rem; bottom: -1rem; font-family: var(--ff-display); font-size: 12rem; font-weight: 300; color: rgba(184,151,90,0.07); white-space: nowrap; pointer-events: none; line-height: 1; }
+.page-banner-img { position: absolute; inset: 0; object-fit: cover; width: 100%; height: 100%; opacity: 0.2; }
+.page-banner-content { position: relative; z-index: 1; }
+.page-banner .section-label { color: var(--gold-light); }
+.page-banner .section-label::before { background: var(--gold-light); }
+.page-banner .section-title { color: var(--white); max-width: 640px; }
+
+/* CONTACT SHARED */
+.contact-band { display: grid; grid-template-columns: 1fr 1fr; }
+.contact-left { background: var(--ink); padding: 6rem 4rem; display: flex; flex-direction: column; justify-content: center; }
+.contact-left .section-title { color: var(--white); }
+.contact-left .section-title em { color: var(--gold-light); }
+.contact-sub { font-size: 0.87rem; color: rgba(255,255,255,0.4); margin: 1.25rem 0 2.5rem; max-width: 340px; line-height: 1.8; }
+.contact-details { display: flex; flex-direction: column; gap: 1.25rem; }
+.contact-row { display: flex; gap: 1rem; align-items: flex-start; }
+.contact-row-label { font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); min-width: 60px; padding-top: 0.1rem; }
+.contact-row-val { font-size: 0.87rem; color: rgba(255,255,255,0.6); line-height: 1.6; }
+.contact-row-val a { color: var(--gold-light); text-decoration: none; }
+.contact-right { background: var(--mist-deep); padding: 6rem 4rem; }
+.form-group { margin-bottom: 1.1rem; }
+.form-label { display: block; font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--slate); margin-bottom: 0.45rem; }
+.form-input, .form-select, .form-textarea { width: 100%; font-family: var(--ff-body); font-size: 0.87rem; font-weight: 300; color: var(--ink); background: var(--white); border: 0.5px solid var(--rule); padding: 0.8rem 1rem; outline: none; transition: border-color 0.2s; appearance: none; }
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--gold); }
+.form-textarea { resize: vertical; min-height: 100px; }
+.form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.form-submit { width: 100%; font-family: var(--ff-body); font-size: 0.76rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--white); background: var(--ink); border: none; padding: 1rem; cursor: pointer; margin-top: 0.5rem; transition: background 0.2s; }
+.form-submit:hover { background: var(--gold); color: var(--ink); }
+
+/* FOOTER */
+footer { background: var(--ink-soft); padding: 1.75rem 4rem; display: flex; align-items: center; justify-content: space-between; border-top: 0.5px solid rgba(184,151,90,0.1); }
+.footer-logo { font-family: var(--ff-display); font-size: 0.95rem; color: rgba(255,255,255,0.35); letter-spacing: 0.04em; }
+.footer-logo strong { color: var(--gold); font-weight: 400; }
+.footer-note { font-size: 0.7rem; color: rgba(255,255,255,0.2); letter-spacing: 0.06em; }
+
+/* ══ HOME ══ */
+.hero { min-height: 100vh; display: grid; grid-template-columns: 55% 45%; padding-top: 5rem; }
+.hero-left { background: var(--ink-soft); display: flex; flex-direction: column; justify-content: center; padding: 6rem 5rem; position: relative; overflow: hidden; }
+.hero-left::before { content: ''; position: absolute; top: -80px; right: -80px; width: 300px; height: 300px; border: 1px solid rgba(184,151,90,0.12); border-radius: 50%; }
+.hero-eyebrow { font-size: 0.72rem; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.75rem; display: flex; align-items: center; gap: 1rem; }
+.hero-eyebrow::before { content: ''; display: block; width: 36px; height: 0.5px; background: var(--gold); }
+.hero-title { font-family: var(--ff-display); font-size: clamp(3rem, 5vw, 5.2rem); font-weight: 300; line-height: 1.05; color: var(--white); margin-bottom: 1.5rem; }
+.hero-title em { font-style: italic; color: var(--gold-light); }
+.hero-sub { font-size: 0.88rem; color: rgba(255,255,255,0.5); max-width: 380px; line-height: 1.85; margin-bottom: 3rem; }
+.hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+.hero-right { position: relative; overflow: hidden; display: flex; flex-direction: column; }
+.hero-right-img { flex: 1; min-height: 320px; object-fit: cover; width: 100%; display: block; filter: brightness(0.72) saturate(0.85); }
+.hero-right-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, rgba(14,14,14,0.05) 0%, rgba(14,14,14,0.45) 100%); pointer-events: none; }
+.hero-stats { background: var(--mist-deep); display: grid; grid-template-columns: 1fr 1fr; gap: 0.5px; background-color: var(--rule); border-top: 0.5px solid var(--rule); flex-shrink: 0; }
+.stat-cell { background: var(--white); padding: 1.5rem 1.75rem; }
+.stat-cell:nth-child(even) { background: var(--mist); }
+.stat-num { font-family: var(--ff-display); font-size: 2.6rem; font-weight: 300; color: var(--ink); line-height: 1; margin-bottom: 0.3rem; }
+.stat-num span { color: var(--gold); font-size: 1.8rem; }
+.stat-label { font-size: 0.7rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--slate); }
+.home-intro { padding: 7rem 4rem; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; background: var(--white); }
+.home-intro-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; filter: saturate(0.85); display: block; }
+.home-intro-body { font-size: 0.9rem; color: var(--slate); line-height: 1.85; margin: 1.25rem 0 2rem; }
+.home-service-strip { padding: 6rem 4rem; background: var(--mist); }
+.home-service-strip-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; }
+.sp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5px; background: var(--rule); border: 0.5px solid var(--rule); }
+.sp-card { background: var(--white); overflow: hidden; }
+.sp-card:hover .sp-card-img { transform: scale(1.04); }
+.sp-img-wrap { overflow: hidden; aspect-ratio: 4/3; }
+.sp-card-img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; filter: saturate(0.8); }
+.sp-card-body { padding: 1.5rem 1.5rem 2rem; }
+.sp-num { font-family: var(--ff-display); font-size: 0.8rem; color: var(--gold); margin-bottom: 0.4rem; letter-spacing: 0.06em; }
+.sp-name { font-family: var(--ff-display); font-size: 1.3rem; font-weight: 400; color: var(--ink); margin-bottom: 0.5rem; }
+.sp-desc { font-size: 0.8rem; color: var(--slate); line-height: 1.7; }
+.home-cta-band { background: var(--ink); padding: 5rem 4rem; display: flex; align-items: center; justify-content: space-between; gap: 3rem; }
+.home-cta-band h2 { font-family: var(--ff-display); font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 300; color: var(--white); line-height: 1.2; max-width: 520px; }
+.home-cta-band h2 em { font-style: italic; color: var(--gold-light); }
+
+/* ══ ABOUT ══ */
+.about-story { padding: 7rem 4rem; display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; background: var(--white); }
+.about-story p { font-size: 0.9rem; color: var(--slate); line-height: 1.85; margin-bottom: 1rem; }
+.about-img-stack { position: relative; padding-bottom: 2rem; }
+.about-img-main { width: 100%; aspect-ratio: 3/4; object-fit: cover; filter: saturate(0.85); display: block; }
+.about-img-badge { position: absolute; bottom: 0; left: -1.5rem; background: var(--ink); padding: 1.5rem 2rem; border-left: 3px solid var(--gold); }
+.about-img-badge-num { font-family: var(--ff-display); font-size: 3rem; font-weight: 300; color: var(--gold); line-height: 1; display: block; }
+.about-img-badge-text { font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+.about-values { padding: 7rem 4rem; background: var(--mist); }
+.about-values-header { text-align: center; margin-bottom: 4rem; }
+.values-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5px; background: var(--rule); border: 0.5px solid var(--rule); }
+.value-card { background: var(--white); padding: 2.5rem 1.75rem; transition: background 0.25s; }
+.value-card:hover { background: var(--gold-pale); }
+.value-icon { font-size: 1.8rem; margin-bottom: 1.25rem; display: block; }
+.value-name { font-family: var(--ff-display); font-size: 1.25rem; font-weight: 400; color: var(--ink); margin-bottom: 0.5rem; }
+.value-desc { font-size: 0.82rem; color: var(--slate); line-height: 1.7; }
+.about-team { padding: 7rem 4rem; background: var(--white); display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
+.about-team-img { width: 100%; aspect-ratio: 16/10; object-fit: cover; filter: saturate(0.8) brightness(0.9); display: block; }
+.about-team-body { font-size: 0.9rem; color: var(--slate); line-height: 1.85; margin: 1.25rem 0 2rem; }
+.team-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem; }
+.mini-stat { padding: 1.25rem; background: var(--mist); border-left: 2px solid var(--gold); }
+.mini-stat-num { font-family: var(--ff-display); font-size: 2rem; font-weight: 300; color: var(--ink); line-height: 1; }
+.mini-stat-num span { color: var(--gold); }
+.mini-stat-label { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--slate); margin-top: 0.3rem; }
+
+/* ══ SERVICES ══ */
+.services-intro { padding: 7rem 4rem; background: var(--white); display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+.services-intro-body { font-size: 0.9rem; color: var(--slate); line-height: 1.85; margin: 1.25rem 0; }
+.services-intro-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; filter: saturate(0.85); display: block; }
+.services-full { padding: 0 4rem 7rem; background: var(--white); }
+.service-row { display: grid; grid-template-columns: 1fr 1fr; border: 0.5px solid var(--rule); margin-bottom: 1.5px; overflow: hidden; }
+.service-row-img-wrap { overflow: hidden; }
+.service-row-img { aspect-ratio: 16/10; object-fit: cover; width: 100%; display: block; filter: saturate(0.82); transition: transform 0.5s; }
+.service-row:hover .service-row-img { transform: scale(1.03); }
+.service-row-content { padding: 3rem 2.5rem; display: flex; flex-direction: column; justify-content: center; background: var(--mist); }
+.service-row.rev .service-row-content { background: var(--white); order: -1; }
+.service-row-num { font-family: var(--ff-display); font-size: 0.8rem; color: var(--gold); letter-spacing: 0.08em; margin-bottom: 0.5rem; }
+.service-row-name { font-family: var(--ff-display); font-size: 1.6rem; font-weight: 400; color: var(--ink); margin-bottom: 0.75rem; line-height: 1.15; }
+.service-row-desc { font-size: 0.85rem; color: var(--slate); line-height: 1.8; margin-bottom: 1.5rem; }
+.service-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.service-tag { font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); border: 0.5px solid var(--rule); padding: 0.3rem 0.75rem; background: var(--gold-pale); }
+.units-section { padding: 6rem 4rem; background: var(--ink-soft); }
+.units-section .section-label { color: var(--gold); }
+.units-section .section-title { color: var(--white); margin-bottom: 3rem; }
+.units-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.5px; }
+.unit-card { background: rgba(255,255,255,0.04); padding: 1.75rem 1.25rem; text-align: center; border: 0.5px solid rgba(184,151,90,0.12); transition: background 0.25s; }
+.unit-card:hover { background: rgba(184,151,90,0.1); }
+.unit-icon { font-size: 2rem; display: block; margin-bottom: 0.75rem; }
+.unit-name { font-family: var(--ff-display); font-size: 1rem; font-weight: 400; color: var(--white); }
+.unit-sub { font-size: 0.72rem; color: rgba(255,255,255,0.35); letter-spacing: 0.08em; margin-top: 0.3rem; }
+
+/* ══ CLIENTS ══ */
+.clients-intro { padding: 7rem 4rem; background: var(--white); display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+.clients-intro-body { font-size: 0.9rem; color: var(--slate); line-height: 1.85; margin: 1.25rem 0 2rem; }
+.clients-intro-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; filter: saturate(0.82); display: block; }
+.sectors-section { padding: 6rem 4rem; background: var(--mist); }
+.sectors-section-header { margin-bottom: 3.5rem; }
+.sectors-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5px; background: var(--rule); border: 0.5px solid var(--rule); }
+.sector-card { background: var(--white); overflow: hidden; }
+.sector-card:hover .sector-card-img { transform: scale(1.04); }
+.sector-img-wrap { overflow: hidden; }
+.sector-card-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; filter: saturate(0.75) brightness(0.85); transition: transform 0.5s; }
+.sector-card-body { padding: 1.5rem 1.5rem 2rem; }
+.sector-tag { font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.4rem; }
+.sector-name { font-family: var(--ff-display); font-size: 1.4rem; font-weight: 400; color: var(--ink); margin-bottom: 0.4rem; }
+.sector-desc { font-size: 0.8rem; color: var(--slate); line-height: 1.7; }
+.testimonial-band { background: var(--ink); padding: 6rem 4rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5px; position: relative; }
+.testimonial-band::before { content: '"'; position: absolute; top: 2rem; left: 3.5rem; font-family: var(--ff-display); font-size: 18rem; color: rgba(184,151,90,0.06); line-height: 1; pointer-events: none; }
+.testimonial-card { background: rgba(255,255,255,0.03); border: 0.5px solid rgba(184,151,90,0.12); padding: 2.5rem 2rem; }
+.testimonial-text { font-family: var(--ff-display); font-style: italic; font-size: 1.1rem; color: rgba(255,255,255,0.75); line-height: 1.65; margin-bottom: 1.5rem; }
+.testimonial-author { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); }
+.testimonial-role { font-size: 0.72rem; color: rgba(255,255,255,0.3); margin-top: 0.2rem; }
+.clients-list-section { padding: 6rem 4rem; background: var(--white); }
+.clients-list-header { margin-bottom: 3.5rem; }
+.clients-table { width: 100%; border-collapse: collapse; border: 0.5px solid var(--rule); }
+.clients-table th { background: var(--ink-soft); color: var(--gold); font-size: 0.68rem; font-weight: 400; letter-spacing: 0.16em; text-transform: uppercase; padding: 1rem 1.5rem; text-align: left; border-bottom: 0.5px solid rgba(184,151,90,0.2); }
+.clients-table td { padding: 0.9rem 1.5rem; border-bottom: 0.5px solid var(--rule); font-size: 0.85rem; color: var(--slate); }
+.clients-table tr:last-child td { border-bottom: none; }
+.clients-table tr:hover td { background: var(--mist); }
+.client-badge { display: inline-block; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.2rem 0.6rem; background: var(--gold-pale); color: var(--gold); border: 0.5px solid var(--rule); }
+
+/* RESPONSIVE */
+@media (max-width: 960px) {
+  nav { padding: 1.1rem 1.5rem; }
+  .nav-links { display: none; }
+  .hero { grid-template-columns: 1fr; }
+  .hero-left { padding: 4.5rem 1.5rem 3rem; }
+  .hero-right { display: none; }
+  .home-intro, .about-story, .about-team, .services-intro, .clients-intro { grid-template-columns: 1fr; gap: 2.5rem; padding: 4rem 1.5rem; }
+  .about-img-badge { left: 0; }
+  .service-row { grid-template-columns: 1fr; }
+  .service-row.rev .service-row-content { order: 0; }
+  .values-grid, .units-grid { grid-template-columns: repeat(2, 1fr); }
+  .sectors-grid, .testimonial-band { grid-template-columns: 1fr; }
+  .page-banner { padding: 4rem 1.5rem 2.5rem; }
+  .contact-band { grid-template-columns: 1fr; }
+  .contact-left, .contact-right { padding: 4rem 1.5rem; }
+  .home-service-strip, .home-cta-band, .units-section, .sectors-section, .clients-list-section, .services-full, .about-values { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .home-cta-band { flex-direction: column; align-items: flex-start; }
+  .home-service-strip-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  .sp-grid { grid-template-columns: 1fr; }
+  footer { flex-direction: column; gap: 0.5rem; text-align: center; padding: 1.5rem; }
+  .form-row-2 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" onclick="showPage('home')">Asiatic <span>Engineering</span></a>
+  <ul class="nav-links">
+    <li><a onclick="showPage('home')" id="nav-home" class="active">Home</a></li>
+    <li><a onclick="showPage('about')" id="nav-about">Who We Are</a></li>
+    <li><a onclick="showPage('services')" id="nav-services">Services</a></li>
+    <li><a onclick="showPage('clients')" id="nav-clients">Our Clients</a></li>
+    <li><a onclick="showPage('contact-page')" id="nav-contact-page">Contact</a></li>
+  </ul>
+  <button class="nav-cta" onclick="showPage('contact-page')">Get a Quote</button>
+</nav>
+
+<!-- ═══════ HOME ═══════ -->
+<div id="page-home" class="page active">
+  <section class="hero">
+    <div class="hero-left">
+      <p class="hero-eyebrow">Mumbai's Trusted HVAC Specialists</p>
+      <h1 class="hero-title">Climate<br><em>engineered</em><br>to perfection.</h1>
+      <p class="hero-sub">Three decades of precision air conditioning solutions for residential, commercial, and industrial spaces across Mumbai.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="showPage('contact-page')">Request a Quote</button>
+        <button class="btn-ghost" onclick="showPage('services')">Our Services</button>
+      </div>
+    </div>
+    <div class="hero-right">
+      <img class="hero-right-img" src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=900&q=80" alt="HVAC Installation" onerror="this.src='https://images.unsplash.com/photo-1621905251189-08b45249da3e?w=900&q=80'">
+      <div class="hero-right-overlay"></div>
+      <div class="hero-stats">
+        <div class="stat-cell"><div class="stat-num">32<span>+</span></div><div class="stat-label">Years in Business</div></div>
+        <div class="stat-cell"><div class="stat-num">500<span>+</span></div><div class="stat-label">Projects Completed</div></div>
+        <div class="stat-cell"><div class="stat-num">5<span>+</span></div><div class="stat-label">Unit Specializations</div></div>
+        <div class="stat-cell"><div class="stat-num">100<span>%</span></div><div class="stat-label">Quality Commitment</div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee-strip" aria-hidden="true"><div class="marquee-inner"><span>Window AC</span><span>Split AC</span><span>Cassette Units</span><span>Floor Standing</span><span>VRV Systems</span><span>VRF Systems</span><span>Commercial HVAC</span><span>Maintenance & Service</span><span>Window AC</span><span>Split AC</span><span>Cassette Units</span><span>Floor Standing</span><span>VRV Systems</span><span>VRF Systems</span><span>Commercial HVAC</span><span>Maintenance & Service</span></div></div>
+
+  <div class="home-intro">
+    <div class="fade-up">
+      <p class="section-label">Our Story</p>
+      <h2 class="section-title">32 years of <em>climate mastery</em> in Mumbai.</h2>
+      <p class="home-intro-body">Since 1992, Asiatic Engineering has delivered precision HVAC solutions across every sector — residential homes, five-star hotels, corporate offices, hospitals, and shopping malls. Our in-house consultants design every project, and our execution team brings it to life with zero compromise on quality.</p>
+      <button class="btn-primary" onclick="showPage('about')">Who We Are →</button>
+    </div>
+    <div class="fade-up">
+      <img class="home-intro-img" src="https://images.unsplash.com/photo-1621905251189-08b45249da3e?w=800&q=80" alt="HVAC Engineering" onerror="this.src='https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80'">
+    </div>
+  </div>
+
+  <div class="home-service-strip">
+    <div class="home-service-strip-header">
+      <div><p class="section-label">What We Do</p><h2 class="section-title">End-to-end <em>HVAC</em> solutions.</h2></div>
+      <button class="btn-outline" onclick="showPage('services')">View All Services</button>
+    </div>
+    <div class="sp-grid">
+      <div class="sp-card fade-up"><div class="sp-img-wrap"><img class="sp-card-img" src="https://images.unsplash.com/photo-1635048424329-a9bfb146d7aa?w=600&q=80" alt="VRF VRV Systems" onerror="this.src='https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80'"></div><div class="sp-card-body"><div class="sp-num">01</div><div class="sp-name">VRF & VRV Systems</div><p class="sp-desc">Large-scale variable refrigerant systems for hotels, malls, and commercial buildings.</p></div></div>
+      <div class="sp-card fade-up"><div class="sp-img-wrap"><img class="sp-card-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="Split AC" onerror="this.src='https://images.unsplash.com/photo-1621905251189-08b45249da3e?w=600&q=80'"></div><div class="sp-card-body"><div class="sp-num">02</div><div class="sp-name">Residential AC</div><p class="sp-desc">Split units, window ACs, and cassette systems tailored to your home's layout.</p></div></div>
+      <div class="sp-card fade-up"><div class="sp-img-wrap"><img class="sp-card-img" src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=600&q=80" alt="HVAC Maintenance" onerror="this.src='https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80'"></div><div class="sp-card-body"><div class="sp-num">03</div><div class="sp-name">Maintenance & AMC</div><p class="sp-desc">Annual maintenance contracts and emergency call-outs for peak system efficiency.</p></div></div>
+    </div>
+  </div>
+
+  <div class="home-cta-band">
+    <h2>Ready to <em>transform</em><br>your climate?</h2>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+      <button class="btn-primary" onclick="showPage('contact-page')">Get a Free Quote</button>
+      <button class="btn-ghost" onclick="showPage('clients')">View Our Clients</button>
+    </div>
+  </div>
+
+  <div class="contact-band">
+    <div class="contact-left">
+      <p class="section-label" style="color:var(--gold);">Reach Us</p>
+      <h2 class="section-title" style="color:var(--white);">Let's talk<br><em>climate.</em></h2>
+      <p class="contact-sub">Call us, email us, or visit our Vikhroli office. Mon–Sat, 9 AM – 7 PM.</p>
+      <div class="contact-details">
+        <div class="contact-row"><span class="contact-row-label">Phone</span><span class="contact-row-val"><a href="tel:9821074154">+91 98210 74154</a></span></div>
+        <div class="contact-row"><span class="contact-row-label">Email</span><span class="contact-row-val"><a href="mailto:info@asiaticengineering.com">info@asiaticengineering.com</a></span></div>
+        <div class="contact-row"><span class="contact-row-label">Address</span><span class="contact-row-val">Shop No. 2, Hariyali Village, Near Uphaday School, Vikhroli (E), Mumbai — 400083</span></div>
+      </div>
+    </div>
+    <div class="contact-right">
+      <p class="section-label">Quick Enquiry</p>
+      <h3 style="font-family:var(--ff-display);font-size:1.5rem;font-weight:300;color:var(--ink);margin-bottom:1.5rem;">Tell us about your project.</h3>
+      <form onsubmit="handleSubmit(event)">
+        <div class="form-row-2"><div class="form-group"><label class="form-label">Name</label><input type="text" class="form-input" placeholder="Your name"></div><div class="form-group"><label class="form-label">Phone</label><input type="tel" class="form-input" placeholder="+91 XXXXX XXXXX"></div></div>
+        <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" placeholder="you@example.com"></div>
+        <div class="form-group"><label class="form-label">Service</label><select class="form-select"><option value="" disabled selected>Select a service</option><option>Sales & Supply</option><option>VRF/VRV Installation</option><option>Maintenance & AMC</option><option>Design & Engineering</option></select></div>
+        <div class="form-group"><label class="form-label">Message</label><textarea class="form-textarea" placeholder="Describe your requirement…"></textarea></div>
+        <button type="submit" class="form-submit">Send Enquiry →</button>
+      </form>
+    </div>
+  </div>
+  <footer><span class="footer-logo">Asiatic <strong>Engineering</strong> — A.E. HVAC</span><span class="footer-note">© 2024 Asiatic Engineering, Mumbai. All rights reserved.</span></footer>
+</div>
+
+<!-- ═══════ WHO WE ARE ═══════ -->
+<div id="page-about" class="page">
+  <div class="page-banner" data-bg-text="ABOUT">
+    <img class="page-banner-img" src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1400&q=80" alt="HVAC Engineering">
+    <div class="page-banner-content"><p class="section-label">Who We Are</p><h1 class="section-title">Three decades of<br><em>trusted engineering.</em></h1></div>
+  </div>
+  <div class="marquee-strip" aria-hidden="true"><div class="marquee-inner"><span>Founded 1992</span><span>Mumbai Based</span><span>In-House Engineers</span><span>32+ Years</span><span>500+ Projects</span><span>Quality First</span><span>Founded 1992</span><span>Mumbai Based</span><span>In-House Engineers</span><span>32+ Years</span><span>500+ Projects</span><span>Quality First</span></div></div>
+
+  <div class="about-story">
+    <div class="about-img-stack fade-up">
+      <img class="about-img-main" src="https://images.unsplash.com/photo-1621905251189-08b45249da3e?w=700&q=80" alt="HVAC Engineering" onerror="this.src='https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=700&q=80'">
+      <div class="about-img-badge"><span class="about-img-badge-num">1992</span><span class="about-img-badge-text">Year Established</span></div>
+    </div>
+    <div class="fade-up">
+      <p class="section-label">Our Story</p>
+      <h2 class="section-title" style="margin-bottom:1.5rem;">Built on trust,<br><em>precision,</em> and experience.</h2>
+      <p>Asiatic Engineering was founded in 1992 with a simple but enduring mission — to deliver the finest air conditioning solutions in Mumbai without ever compromising on quality.</p>
+      <p>Over three decades, we have grown from a small Vikhroli-based operation into one of Mumbai's most respected HVAC companies, trusted by residential clients, leading hotels, hospitals, schools, and corporates.</p>
+      <p style="margin-bottom:2rem;">What sets us apart is our fully in-house team. We don't outsource design or execution — every project is planned, engineered, and installed by our own specialists.</p>
+      <button class="btn-primary" onclick="showPage('services')">Explore Our Services →</button>
+    </div>
+  </div>
+
+  <div class="about-values">
+    <div class="about-values-header fade-up">
+      <p class="section-label center">What Drives Us</p>
+      <h2 class="section-title" style="text-align:center;">Our core <em>principles.</em></h2>
+    </div>
+    <div class="values-grid">
+      <div class="value-card fade-up"><span class="value-icon">🏆</span><div class="value-name">Quality First</div><p class="value-desc">We have never compromised on the quality of our service — not in 1992, not today.</p></div>
+      <div class="value-card fade-up"><span class="value-icon">⚙️</span><div class="value-name">Engineering Precision</div><p class="value-desc">Every project begins with a detailed design by our in-house consultants before any installation.</p></div>
+      <div class="value-card fade-up"><span class="value-icon">💰</span><div class="value-name">Competitive Pricing</div><p class="value-desc">Premium quality at a genuinely competitive price — no hidden costs, no shortcuts.</p></div>
+      <div class="value-card fade-up"><span class="value-icon">🤝</span><div class="value-name">Client Partnership</div><p class="value-desc">We treat every client as a long-term partner, from consultation through ongoing maintenance.</p></div>
+    </div>
+  </div>
+
+  <div class="about-team">
+    <div class="fade-up">
+      <p class="section-label">Our People</p>
+      <h2 class="section-title">Expert engineers.<br><em>Dedicated team.</em></h2>
+      <p class="about-team-body">Our group of specialists brings deep technical expertise to every project — custom-tailored to your exact requirements. From consultants who design the layout to technicians who execute installation, every team member is trained, experienced, and accountable.</p>
+      <div class="team-stats">
+        <div class="mini-stat"><div class="mini-stat-num">32<span>+</span></div><div class="mini-stat-label">Years Experience</div></div>
+        <div class="mini-stat"><div class="mini-stat-num">500<span>+</span></div><div class="mini-stat-label">Projects Done</div></div>
+        <div class="mini-stat"><div class="mini-stat-num">6</div><div class="mini-stat-label">Service Categories</div></div>
+        <div class="mini-stat"><div class="mini-stat-num">5<span>★</span></div><div class="mini-stat-label">Client Rating</div></div>
+      </div>
+    </div>
+    <div class="fade-up">
+      <img class="about-team-img" src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&q=80" alt="HVAC Team" onerror="this.src='https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80'">
+    </div>
+  </div>
+
+  <div class="contact-band">
+    <div class="contact-left"><p class="section-label" style="color:var(--gold);">Connect</p><h2 class="section-title" style="color:var(--white);">Let's build<br><em>something great.</em></h2><p class="contact-sub">Ready to work with Mumbai's most trusted HVAC team?</p><div class="contact-details"><div class="contact-row"><span class="contact-row-label">Phone</span><span class="contact-row-val"><a href="tel:9821074154">+91 98210 74154</a></span></div><div class="contact-row"><span class="contact-row-label">Email</span><span class="contact-row-val"><a href="mailto:info@asiaticengineering.com">info@asiaticengineering.com</a></span></div></div></div>
+    <div class="contact-right"><p class="section-label">Quick Enquiry</p><h3 style="font-family:var(--ff-display);font-size:1.5rem;font-weight:300;color:var(--ink);margin-bottom:1.5rem;">Tell us about your project.</h3><form onsubmit="handleSubmit(event)"><div class="form-row-2"><div class="form-group"><label class="form-label">Name</label><input type="text" class="form-input" placeholder="Your name"></div><div class="form-group"><label class="form-label">Phone</label><input type="tel" class="form-input" placeholder="+91 XXXXX XXXXX"></div></div><div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" placeholder="you@example.com"></div><div class="form-group"><label class="form-label">Message</label><textarea class="form-textarea" placeholder="Describe your requirement…"></textarea></div><button type="submit" class="form-submit">Send Enquiry →</button></form></div>
+  </div>
+  <footer><span class="footer-logo">Asiatic <strong>Engineering</strong> — A.E. HVAC</span><span class="footer-note">© 2024 Asiatic Engineering, Mumbai. All rights reserved.</span></footer>
+</div>
+
+<!-- ═══════ SERVICES ═══════ -->
+<div id="page-services" class="page">
+  <div class="page-banner" data-bg-text="SERVICES">
+    <img class="page-banner-img" src="https://images.unsplash.com/photo-1635048424329-a9bfb146d7aa?w=1400&q=80" alt="HVAC Services" onerror="this.src='https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1400&q=80'">
+    <div class="page-banner-content"><p class="section-label">What We Offer</p><h1 class="section-title">Comprehensive HVAC<br><em>services for every need.</em></h1></div>
+  </div>
+  <div class="marquee-strip" aria-hidden="true"><div class="marquee-inner"><span>Sales & Supply</span><span>VRF/VRV Installation</span><span>Maintenance & AMC</span><span>Design & Engineering</span><span>Commercial Projects</span><span>Residential Solutions</span><span>Sales & Supply</span><span>VRF/VRV Installation</span><span>Maintenance & AMC</span><span>Design & Engineering</span><span>Commercial Projects</span><span>Residential Solutions</span></div></div>
+
+  <div class="services-intro">
+    <div class="fade-up">
+      <p class="section-label">Our Approach</p>
+      <h2 class="section-title">Designed first.<br><em>Executed perfectly.</em></h2>
+      <p class="services-intro-body">Every project begins in our design studio. Our consultants analyse your space, calculate thermal loads, and produce a precise layout before a single unit is ordered. This design-first approach ensures efficient, aesthetically considered installations that last.</p>
+    </div>
+    <div class="fade-up"><img class="services-intro-img" src="https://images.unsplash.com/photo-1621905251189-08b45249da3e?w=700&q=80" alt="HVAC Design" onerror="this.src='https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=700&q=80'"></div>
+  </div>
+
+  <div class="services-full">
+    <div class="service-row fade-up">
+      <div class="service-row-img-wrap"><img class="service-row-img" src="https://images.unsplash.com/photo-1635048424329-a9bfb146d7aa?w=700&q=80" alt="VRF VRV Systems" onerror="this.src='https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=700&q=80'"></div>
+      <div class="service-row-content"><div class="service-row-num">01</div><div class="service-row-name">VRF & VRV Systems</div><p class="service-row-desc">Variable Refrigerant Flow and Volume systems are the gold standard for large commercial properties. We design, supply, and commission VRF/VRV systems for hotels, malls, hospitals, and corporate campuses with full post-installation support.</p><div class="service-tags"><span class="service-tag">Commercial</span><span class="service-tag">Hotels</span><span class="service-tag">Malls</span><span class="service-tag">Hospitals</span></div></div>
+    </div>
+    <div class="service-row rev fade-up">
+      <div class="service-row-content"><div class="service-row-num">02</div><div class="service-row-name">Residential Solutions</div><p class="service-row-desc">From window units to multi-room split systems, we bring the right climate solution to your home. Our team assesses your space and recommends the most energy-efficient option — then handles the full installation.</p><div class="service-tags"><span class="service-tag">Window AC</span><span class="service-tag">Split AC</span><span class="service-tag">Cassette</span><span class="service-tag">Floor Standing</span></div></div>
+      <div class="service-row-img-wrap"><img class="service-row-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80" alt="Split AC" onerror="this.src='https://images.unsplash.com/photo-1621905251189-08b45249da3e?w=700&q=80'"></div>
+    </div>
+    <div class="service-row fade-up">
+      <div class="service-row-img-wrap"><img class="service-row-img" src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=700&q=80" alt="HVAC Maintenance" onerror="this.src='https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=700&q=80'"></div>
+      <div class="service-row-content"><div class="service-row-num">03</div><div class="service-row-name">Maintenance & AMC</div><p class="service-row-desc">Preventive servicing is the most cost-effective way to extend the life of your HVAC system. We offer Annual Maintenance Contracts, scheduled servicing, gas top-up, and rapid-response emergency call-outs across Mumbai.</p><div class="service-tags"><span class="service-tag">AMC</span><span class="service-tag">Preventive</span><span class="service-tag">Emergency</span><span class="service-tag">All Brands</span></div></div>
+    </div>
+    <div class="service-row rev fade-up">
+      <div class="service-row-content"><div class="service-row-num">04</div><div class="service-row-name">Design & Engineering</div><p class="service-row-desc">Our in-house consultants produce detailed HVAC layout drawings, load calculations, and equipment schedules for new constructions and retrofits. We work with architects and builders to integrate climate systems seamlessly.</p><div class="service-tags"><span class="service-tag">Layout Design</span><span class="service-tag">Load Calc</span><span class="service-tag">Consultancy</span></div></div>
+      <div class="service-row-img-wrap"><img class="service-row-img" src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=700&q=80" alt="HVAC Engineering" onerror="this.src='https://images.unsplash.com/photo-1621905251189-08b45249da3e?w=700&q=80'"></div>
+    </div>
+  </div>
+
+  <div class="units-section">
+    <p class="section-label">Products</p>
+    <h2 class="section-title">Units we <em>deal in.</em></h2>
+    <div class="units-grid">
+      <div class="unit-card fade-up"><span class="unit-icon">🪟</span><div class="unit-name">Window AC</div><div class="unit-sub">All-in-one units</div></div>
+      <div class="unit-card fade-up"><span class="unit-icon">❄️</span><div class="unit-name">Split AC</div><div class="unit-sub">Indoor + outdoor</div></div>
+      <div class="unit-card fade-up"><span class="unit-icon">🔲</span><div class="unit-name">Cassette AC</div><div class="unit-sub">Ceiling-mounted</div></div>
+      <div class="unit-card fade-up"><span class="unit-icon">🏢</span><div class="unit-name">Floor Standing</div><div class="unit-sub">High-capacity</div></div>
+      <div class="unit-card fade-up"><span class="unit-icon">🔗</span><div class="unit-name">VRV & VRF</div><div class="unit-sub">Multi-zone systems</div></div>
+    </div>
+  </div>
+
+  <div class="contact-band">
+    <div class="contact-left"><p class="section-label" style="color:var(--gold);">Get Started</p><h2 class="section-title" style="color:var(--white);">Request a<br><em>free quote.</em></h2><p class="contact-sub">Tell us about your space and we'll get back within 2–4 hours.</p><div class="contact-details"><div class="contact-row"><span class="contact-row-label">Phone</span><span class="contact-row-val"><a href="tel:9821074154">+91 98210 74154</a></span></div><div class="contact-row"><span class="contact-row-label">Email</span><span class="contact-row-val"><a href="mailto:info@asiaticengineering.com">info@asiaticengineering.com</a></span></div></div></div>
+    <div class="contact-right"><p class="section-label">Quick Enquiry</p><h3 style="font-family:var(--ff-display);font-size:1.5rem;font-weight:300;color:var(--ink);margin-bottom:1.5rem;">Tell us about your project.</h3><form onsubmit="handleSubmit(event)"><div class="form-row-2"><div class="form-group"><label class="form-label">Name</label><input type="text" class="form-input" placeholder="Your name"></div><div class="form-group"><label class="form-label">Phone</label><input type="tel" class="form-input" placeholder="+91 XXXXX XXXXX"></div></div><div class="form-group"><label class="form-label">Service Needed</label><select class="form-select"><option value="" disabled selected>Select a service</option><option>Sales & Supply</option><option>VRF/VRV Installation</option><option>Maintenance & AMC</option><option>Design & Engineering</option></select></div><div class="form-group"><label class="form-label">Message</label><textarea class="form-textarea" placeholder="Describe your requirement…"></textarea></div><button type="submit" class="form-submit">Send Enquiry →</button></form></div>
+  </div>
+  <footer><span class="footer-logo">Asiatic <strong>Engineering</strong> — A.E. HVAC</span><span class="footer-note">© 2024 Asiatic Engineering, Mumbai. All rights reserved.</span></footer>
+</div>
+
+<!-- ═══════ CLIENTS ═══════ -->
+<div id="page-clients" class="page">
+  <div class="page-banner" data-bg-text="CLIENTS">
+    <img class="page-banner-img" src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1400&q=80" alt="Commercial Office" onerror="this.src='https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1400&q=80'">
+    <div class="page-banner-content"><p class="section-label">Our Clients</p><h1 class="section-title">Trusted across<br><em>every sector.</em></h1></div>
+  </div>
+  <div class="marquee-strip" aria-hidden="true"><div class="marquee-inner"><span>Residential</span><span>Commercial</span><span>Hospitality</span><span>Healthcare</span><span>Education</span><span>Retail</span><span>Industrial</span><span>Residential</span><span>Commercial</span><span>Hospitality</span><span>Healthcare</span><span>Education</span><span>Retail</span><span>Industrial</span></div></div>
+
+  <div class="clients-intro">
+    <div class="fade-up">
+      <p class="section-label">Who We Serve</p>
+      <h2 class="section-title">From homes to<br><em>five-star hotels.</em></h2>
+      <p class="clients-intro-body">Over 32 years, we have served clients across every sector — from individual homeowners to large corporations, from single-room installations to multi-floor commercial HVAC systems. Our client list spans Mumbai's finest hotels, leading hospitals, reputed institutions, and prominent corporates.</p>
+      <button class="btn-primary" onclick="showPage('contact-page')">Work With Us →</button>
+    </div>
+    <div class="fade-up"><img class="clients-intro-img" src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=700&q=80" alt="Commercial Space" onerror="this.src='https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=700&q=80'"></div>
+  </div>
+
+  <div class="sectors-section">
+    <div class="sectors-section-header fade-up">
+      <p class="section-label">Industries Served</p>
+      <h2 class="section-title">Sectors we <em>specialise in.</em></h2>
+    </div>
+    <div class="sectors-grid">
+      <div class="sector-card fade-up"><div class="sector-img-wrap"><img class="sector-card-img" src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80" alt="Corporate Office" onerror="this.src='https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80'"></div><div class="sector-card-body"><p class="sector-tag">Sector 01</p><p class="sector-name">Corporate Offices</p><p class="sector-desc">Precision climate control for open-plan offices, meeting rooms, and server rooms.</p></div></div>
+      <div class="sector-card fade-up"><div class="sector-img-wrap"><img class="sector-card-img" src="https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=600&q=80" alt="Hotel" onerror="this.src='https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80'"></div><div class="sector-card-body"><p class="sector-tag">Sector 02</p><p class="sector-name">Hospitality & Hotels</p><p class="sector-desc">Silent, efficient VRF/VRV systems for guest rooms, lobbies, and banquet halls.</p></div></div>
+      <div class="sector-card fade-up"><div class="sector-img-wrap"><img class="sector-card-img" src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=600&q=80" alt="Hospital" onerror="this.src='https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80'"></div><div class="sector-card-body"><p class="sector-tag">Sector 03</p><p class="sector-name">Healthcare</p><p class="sector-desc">Sterile, temperature-controlled environments for hospitals and clinics.</p></div></div>
+      <div class="sector-card fade-up"><div class="sector-img-wrap"><img class="sector-card-img" src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=600&q=80" alt="School" onerror="this.src='https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80'"></div><div class="sector-card-body"><p class="sector-tag">Sector 04</p><p class="sector-name">Education</p><p class="sector-desc">Energy-efficient systems for classrooms, libraries, and auditoriums.</p></div></div>
+      <div class="sector-card fade-up"><div class="sector-img-wrap"><img class="sector-card-img" src="https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=600&q=80" alt="Shopping Mall" onerror="this.src='https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80'"></div><div class="sector-card-body"><p class="sector-tag">Sector 05</p><p class="sector-name">Retail & Malls</p><p class="sector-desc">High-capacity central air conditioning for shopping centres and showrooms.</p></div></div>
+      <div class="sector-card fade-up"><div class="sector-img-wrap"><img class="sector-card-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="Residential" onerror="this.src='https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80'"></div><div class="sector-card-body"><p class="sector-tag">Sector 06</p><p class="sector-name">Residential</p><p class="sector-desc">Bespoke home AC solutions — window, split, and multi-zone systems installed with care.</p></div></div>
+    </div>
+  </div>
+
+  <div class="testimonial-band">
+    <div class="testimonial-card fade-up"><p class="testimonial-text">"Asiatic Engineering designed and installed our entire office HVAC. The team was professional, on-time, and the quality of work was outstanding."</p><p class="testimonial-author">Rajesh Mehta</p><p class="testimonial-role">Facilities Manager, Corporate Client</p></div>
+    <div class="testimonial-card fade-up"><p class="testimonial-text">"We've used their AMC services for over 8 years. Reliable, responsive, and they genuinely care about keeping your systems running at peak efficiency."</p><p class="testimonial-author">Priya Sharma</p><p class="testimonial-role">Operations Head, Hospitality Group</p></div>
+    <div class="testimonial-card fade-up"><p class="testimonial-text">"From initial design consultation to final commissioning, Asiatic Engineering handled our school's HVAC project with expertise and dedication."</p><p class="testimonial-author">Dr. Anand Kulkarni</p><p class="testimonial-role">Principal, Educational Institution</p></div>
+  </div>
+
+  <div class="clients-list-section">
+    <div class="clients-list-header fade-up">
+      <p class="section-label">Project History</p>
+      <h2 class="section-title">Some of our <em>notable work.</em></h2>
+    </div>
+    <table class="clients-table fade-up">
+      <thead><tr><th>Client / Project</th><th>Sector</th><th>Location</th><th>Service</th></tr></thead>
+      <tbody>
+        <tr><td>Residential Complex, Powai</td><td><span class="client-badge">Residential</span></td><td>Mumbai</td><td>Multi-zone Split AC Installation</td></tr>
+        <tr><td>Corporate Office, BKC</td><td><span class="client-badge">Commercial</span></td><td>Mumbai</td><td>VRV System Design & Installation</td></tr>
+        <tr><td>Hotel Project, Andheri</td><td><span class="client-badge">Hospitality</span></td><td>Mumbai</td><td>VRF System + AMC</td></tr>
+        <tr><td>School Campus, Thane</td><td><span class="client-badge">Education</span></td><td>Thane</td><td>Cassette AC & Floor Standing Units</td></tr>
+        <tr><td>Shopping Complex, Vikhroli</td><td><span class="client-badge">Retail</span></td><td>Mumbai</td><td>Central HVAC Design & Supply</td></tr>
+        <tr><td>Clinic & Hospital, Mulund</td><td><span class="client-badge">Healthcare</span></td><td>Mumbai</td><td>Precision Climate Systems</td></tr>
+        <tr><td>Residential Bungalow, Juhu</td><td><span class="client-badge">Residential</span></td><td>Mumbai</td><td>Split & Window AC Installation</td></tr>
+        <tr><td>IT Park, Navi Mumbai</td><td><span class="client-badge">Commercial</span></td><td>Navi Mumbai</td><td>Full HVAC Engineering & AMC</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="contact-band">
+    <div class="contact-left"><p class="section-label" style="color:var(--gold);">Join Our Clients</p><h2 class="section-title" style="color:var(--white);">Let's work<br><em>together.</em></h2><p class="contact-sub">Join hundreds of satisfied clients across Mumbai who trust Asiatic Engineering.</p><div class="contact-details"><div class="contact-row"><span class="contact-row-label">Phone</span><span class="contact-row-val"><a href="tel:9821074154">+91 98210 74154</a></span></div><div class="contact-row"><span class="contact-row-label">Email</span><span class="contact-row-val"><a href="mailto:info@asiaticengineering.com">info@asiaticengineering.com</a></span></div></div></div>
+    <div class="contact-right"><p class="section-label">Quick Enquiry</p><h3 style="font-family:var(--ff-display);font-size:1.5rem;font-weight:300;color:var(--ink);margin-bottom:1.5rem;">Tell us about your project.</h3><form onsubmit="handleSubmit(event)"><div class="form-row-2"><div class="form-group"><label class="form-label">Name</label><input type="text" class="form-input" placeholder="Your name"></div><div class="form-group"><label class="form-label">Phone</label><input type="tel" class="form-input" placeholder="+91 XXXXX XXXXX"></div></div><div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" placeholder="you@example.com"></div><div class="form-group"><label class="form-label">Message</label><textarea class="form-textarea" placeholder="Describe your requirement…"></textarea></div><button type="submit" class="form-submit">Send Enquiry →</button></form></div>
+  </div>
+  <footer><span class="footer-logo">Asiatic <strong>Engineering</strong> — A.E. HVAC</span><span class="footer-note">© 2024 Asiatic Engineering, Mumbai. All rights reserved.</span></footer>
+</div>
+
+<!-- ═══════ CONTACT ═══════ -->
+<div id="page-contact-page" class="page">
+  <div class="page-banner" data-bg-text="CONTACT" style="min-height:36vh;">
+    <div class="page-banner-content"><p class="section-label">Get In Touch</p><h1 class="section-title">Let's engineer<br><em>your ideal climate.</em></h1></div>
+  </div>
+  <div class="contact-band">
+    <div class="contact-left" style="padding:6rem 4rem 7rem;">
+      <p class="section-label" style="color:var(--gold);">Contact Details</p>
+      <h2 class="section-title" style="color:var(--white);margin-bottom:2rem;">Reach us<br><em>anytime.</em></h2>
+      <div class="contact-details">
+        <div class="contact-row"><span class="contact-row-label">Phone</span><span class="contact-row-val"><a href="tel:9821074154">+91 98210 74154</a></span></div>
+        <div class="contact-row"><span class="contact-row-label">Email</span><span class="contact-row-val"><a href="mailto:info@asiaticengineering.com">info@asiaticengineering.com</a></span></div>
+        <div class="contact-row"><span class="contact-row-label">Web</span><span class="contact-row-val"><a href="https://asiaticengineering.com" target="_blank">www.asiaticengineering.com</a></span></div>
+        <div class="contact-row"><span class="contact-row-label">Address</span><span class="contact-row-val">Shop No. 2, Hariyali Village,<br>Near Uphaday School,<br>Vikhroli (E), Mumbai — 400083</span></div>
+        <div class="contact-row"><span class="contact-row-label">Hours</span><span class="contact-row-val">Monday – Saturday, 9:00 AM – 7:00 PM</span></div>
+      </div>
+      <div style="margin-top:3rem;padding:1.5rem;border:0.5px solid rgba(184,151,90,0.2);background:rgba(184,151,90,0.05);">
+        <p style="font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:0.5rem;">Quick Response</p>
+        <p style="font-size:0.87rem;color:rgba(255,255,255,0.5);line-height:1.7;">We respond to all enquiries within <strong style="color:rgba(255,255,255,0.75);font-weight:400;">2–4 hours</strong> during business hours.</p>
+      </div>
+    </div>
+    <div class="contact-right" style="padding:6rem 4rem 7rem;">
+      <p class="section-label">Enquiry Form</p>
+      <h2 class="section-title" style="margin-bottom:2rem;">Tell us about<br><em>your project.</em></h2>
+      <form onsubmit="handleSubmit(event)">
+        <div class="form-row-2"><div class="form-group"><label class="form-label">Full Name *</label><input type="text" class="form-input" placeholder="Your full name" required></div><div class="form-group"><label class="form-label">Phone *</label><input type="tel" class="form-input" placeholder="+91 XXXXX XXXXX" required></div></div>
+        <div class="form-group"><label class="form-label">Email Address</label><input type="email" class="form-input" placeholder="you@example.com"></div>
+        <div class="form-group"><label class="form-label">Property Type</label><select class="form-select"><option value="" disabled selected>Select property type</option><option>Residential – Apartment/House</option><option>Commercial – Office</option><option>Hotel / Hospitality</option><option>Hospital / Healthcare</option><option>School / Institution</option><option>Retail / Mall</option></select></div>
+        <div class="form-group"><label class="form-label">Service Required</label><select class="form-select"><option value="" disabled selected>Select a service</option><option>New AC Sales & Installation</option><option>VRF/VRV System</option><option>Maintenance & AMC</option><option>Design & Engineering</option><option>Emergency Service</option></select></div>
+        <div class="form-group"><label class="form-label">Project Details</label><textarea class="form-textarea" style="min-height:130px;" placeholder="Tell us about your space — size, number of rooms, location, timeline…"></textarea></div>
+        <button type="submit" class="form-submit">Submit Enquiry →</button>
+      </form>
+    </div>
+  </div>
+  <footer><span class="footer-logo">Asiatic <strong>Engineering</strong> — A.E. HVAC</span><span class="footer-note">© 2024 Asiatic Engineering, Mumbai. All rights reserved.</span></footer>
+</div>
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  const navEl = document.getElementById('nav-' + id);
+  if (navEl) navEl.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  setTimeout(initFadeUps, 100);
+}
+function initFadeUps() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 70);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade-up:not(.visible)').forEach(el => observer.observe(el));
+}
+function handleSubmit(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('[type="submit"]');
+  const orig = btn.textContent;
+  btn.textContent = 'Message Sent ✓';
+  btn.style.background = 'var(--gold)';
+  btn.style.color = 'var(--ink)';
+  setTimeout(() => { btn.textContent = orig; btn.style.background = ''; btn.style.color = ''; e.target.reset(); }, 3000);
+}
+initFadeUps();
+</script>
+</body>
+</html>
